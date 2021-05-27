@@ -1,4 +1,10 @@
 /* eslint-disable no-restricted-globals */
+import { clientsClaim } from 'workbox-core';
+import { ExpirationPlugin } from 'workbox-expiration';
+import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate } from 'workbox-strategies';
+
 
 // This service worker can be customized!
 // See https://developers.google.com/web/tools/workbox/modules
@@ -6,12 +12,6 @@
 // code you'd like.
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
-
-import { clientsClaim } from 'workbox-core';
-import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
 
 clientsClaim();
 
@@ -50,7 +50,7 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  ({ url }) => url.origin === self.location.origin && /\.(jpe?g|png|ico|svg)$/gi.test(url.pathname),
   new StaleWhileRevalidate({
     cacheName: 'images',
     plugins: [
