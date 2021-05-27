@@ -61,6 +61,28 @@ registerRoute(
   })
 );
 
+
+const TWO_MINUTES_IN_SECONDS = 60*2;
+registerRoute(({url}) => url.origin.includes('qorebase.io'), new NetworkFirst({
+  cacheName: 'apidata',
+  maxAgeSeconds: TWO_MINUTES_IN_SECONDS,
+  maxEntries: 30
+}))
+
+registerRoute(
+  // Add in any other file extensions or routing criteria as needed.
+  ({ url }) => /\.(jpe?g|png|ico|svg)$/gi.test(url.pathname),
+  new StaleWhileRevalidate({
+    cacheName: 'apiImages',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
+
 const YEAR_IN_SECONDS = 60 * 60 * 24 * 360
 registerRoute(
   ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
