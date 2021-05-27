@@ -41,10 +41,10 @@ const Header = () => {
               </li>
               <li className="mx-3 py-6 md:py-0">
                 <a
-                  href="/"
+                  href="/profile"
                   className="text-black md:text-white hover:underline"
                 >
-                  Rewards
+                  Profile
                 </a>
               </li>
             </ul>
